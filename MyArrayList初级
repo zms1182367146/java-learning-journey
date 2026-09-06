@@ -1,0 +1,93 @@
+public class ArrayListTest <T>{
+        private Object[] elementData;  // 内部就是数组
+        private int size;              // 记录元素个数
+        private static final int DEFAULT_CAPACITY = 10; // 默认容量
+
+        public ArrayListTest() {
+            this.elementData = new Object[DEFAULT_CAPACITY];
+        }
+
+        //add扩容
+        public void add(T item) {
+            // 1. 判断要不要扩容：size 满了就扩 1.5 倍
+            if (size == elementData.length) {
+            grow();
+            }
+
+            // 2. elementData[size] = item;
+            elementData[size] = item;
+            // 3. size++;
+            size++;
+        }
+
+        //main输出
+    public static void main(String[] args) {
+        ArrayListTest list = new ArrayListTest();
+        list.add("阿米娅");
+        list.add("黍");
+        list.add("德克萨斯");
+        list.add("泥岩");
+        list.add("阿");
+        list.add("劫");
+        list.add("维克托");
+        list.add("佛耶戈");
+        list.add("A");
+        list.add("B");
+        list.add("C");
+        list.add("D");
+        list.add("E");
+        list.add("F");
+        list.add("G");
+        list.add("H");
+        list.add("I");
+        list.add("J");
+        list.add("K");
+        list.add("L");
+        list.add("M");
+
+        System.out.println(list.get(0));
+        System.out.println(list.size);
+
+        Object R = list.remove(2);
+        System.out.println(R);
+        System.out.println(list.size());
+        System.out.println(list.get(2));
+    }
+      public T get(int index) {
+            // 检查下标越界，返回 elementData[index]
+
+          if(index < 0 || index >=size){
+              throw new IndexOutOfBoundsException("下标越界："+index);
+          }
+
+          return (T) elementData[index];
+      }
+     public T remove(int index) {
+         if(index < 0 || index >=size){
+             throw new IndexOutOfBoundsException("下标越界："+index);
+         }
+
+         // 取出要删的，把后面的元素整体前移，size--
+         T R = (T) elementData[index];
+
+         //  核心：把 index 后面所有元素整体往前挪一位
+         //    从 index 开始，一直挪到倒数第二个位置（size-1）
+         for (int i = index; i < size - 1; i++) {
+             elementData[i] = elementData[i + 1];
+
+         }
+         // 最后一个位置现在空了，置 null，再去掉它一个名额
+         elementData[size - 1] = null;
+         size--;
+         return R;
+     }
+         public int size() {
+             return size;
+         }
+    //grow
+        private void grow() {
+            // Arrays.copyOf 扩容到 1.5 倍
+           int Grow = elementData.length +elementData.length / 2;
+           elementData = Arrays.copyOf(elementData,Grow);
+        }
+    }
