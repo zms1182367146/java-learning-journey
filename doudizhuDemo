@@ -1,0 +1,159 @@
+package DouDiZhuDemo;
+
+import com.sun.source.tree.NewArrayTree;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class Room {
+    private List<Card> allCards = new ArrayList<>();
+
+    public Room(){
+        //做出54张牌，存到allCards集合
+        //点数
+        String[] numbers = {"3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2"};
+        //花色
+        String[] colors = {"♠", "♥", "♣", "♦"};
+        //大小
+        int size = 0;
+        //先遍历点数，再遍历花色，组织牌
+        for (String number : numbers){
+            //大小赋值
+            size++;
+            for (String color : colors){
+                //一张牌的情况
+                Card c = new Card(number,color,size);
+                allCards.add(c);
+
+            }
+        }
+        //小王大王存入
+        Card c1 = new Card("","🃞",++size);
+        Card c2 = new Card("","\uD83C\uDCCF",++size);
+        Collections.addAll(allCards,c1,c2);
+        System.out.println("新牌：" + allCards);
+
+    }
+//游戏启动
+    public void start() {
+        //洗牌（打乱顺序）
+        Collections.shuffle(allCards);
+        System.out.println("洗牌后："+allCards);
+
+        //发牌
+        List<Card> X = new ArrayList<>();
+        List<Card> Y = new ArrayList<>();
+        List<Card> Z = new ArrayList<>();
+        //发牌给三位玩家，发出51张牌，剩余3张
+        //%3求余
+        for (int i = 0; i < allCards.size() - 3; i++) {
+            Card c = allCards.get(i);
+            //判断牌发给谁
+            if(i % 3 == 0){
+                X.add(c);
+            }else if (i % 3 == 1){
+                Y.add(c);
+            }else if (i % 3 == 2){
+                Z.add(c);
+            }
+        }
+
+        //手牌排序
+        sortCards(X);
+        sortCards(Y);
+        sortCards(Z);
+
+        //展示牌
+        System.out.println("阿米娅" + X);
+        System.out.println("黍" + Y);
+        System.out.println("银灰" + Z);
+        //截取集合方法subList
+        List<Card> lastCards = allCards.subList(allCards.size() - 3,allCards.size());
+        System.out.println("底牌：" + lastCards);
+        X.addAll(lastCards);
+        sortCards(X);
+        System.out.println("阿米娅抢地主" + X);
+    }
+
+    //用方法排序
+    private void sortCards(List<Card> cards) {
+        Collections.sort(cards, new Comparator<Card>() {
+            @Override
+            public int compare(Card o1, Card o2) {
+                return o1.getSize() - o2.getSize();//升序排序
+            }
+        });
+    }
+}
+
+
+package DouDiZhuDemo;
+//目标：斗地主游戏的案例开发。
+//业务需求分析：
+//业务：总共有54张牌。
+//点数："3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2"
+//花色："♠", "♥", "♣", "♦"
+//大小王："🃏", "🃞"
+//点数分别要组合4种花色，大小王各一张。
+//斗地主：发出51张牌，剩下3张作为底牌。
+public class Game {
+    //牌
+    //房间
+    public static void main(String[] args) {
+        Room room = new Room();
+        room.start();
+    }
+}
+
+
+
+
+package DouDiZhuDemo;
+
+public class Card {
+    private String number;
+    private String color;
+    private int size;
+//每张牌存在大小
+
+
+    public Card() {
+    }
+
+    public Card(String number, String color, int size) {
+        this.number = number;
+        this.color = color;
+        this.size = size;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        return number + color ;//+ "-->" +size;
+    }
+}
